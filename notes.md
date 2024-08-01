@@ -1,6 +1,6 @@
-#Git Commands Documentation
+# Git Commands Documentation
 
-##Configuration and Setup
+## Configuration and Setup
 
 1. **Check Existing Credential Helpers**
    ```bash
