@@ -1,4 +1,5 @@
 import smtplib
+import logging
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
@@ -6,7 +7,7 @@ from email.mime.text import MIMEText
 SMTP_SERVER = 'smtp.sendgrid.net'
 SMTP_PORT = 587  # Use 465 for SSL
 SMTP_USERNAME = 'apikey'  # This is the literal string 'apikey'
-SMTP_PASSWORD = 'SG.Pez4TC7Y1p4Q4wwTQ.CGC83MmeMmADKYjNqYM_4KaxQO4'
+SMTP_PASSWORD = 'SG.mackwlk.dwldiqknwekdw.flfjof5jojwde'
 
 # Email content
 FROM_EMAIL = 'ani@from.com'
@@ -24,11 +25,25 @@ def send_email():
     # Attach body
     msg.attach(MIMEText(BODY, 'plain'))
 
-    # Connect to SMTP server and send email
+    # Set up logging to capture detailed SMTP communication
+    logger = logging.getLogger('smtplib')
+    logger.setLevel(logging.DEBUG)
+    handler = logging.StreamHandler()
+    handler.setLevel(logging.DEBUG)
+    logger.addHandler(handler)
+
     try:
+        # Create an SMTP client session object
         server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
-        server.starttls()  # Upgrade the connection to secure TLS
+        server.set_debuglevel(1)  # Enable debug output for the SMTP session
+
+        # Upgrade the connection to secure TLS
+        server.starttls()
+        
+        # Log in to the SMTP server
         server.login(SMTP_USERNAME, SMTP_PASSWORD)
+        
+        # Send email
         server.sendmail(FROM_EMAIL, TO_EMAIL, msg.as_string())
         print('Email sent successfully!')
     except Exception as e:
